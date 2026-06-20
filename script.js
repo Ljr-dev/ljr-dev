@@ -1,25 +1,108 @@
-const links = document.querySelectorAll('a[href^="#"]');
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener("click", function (e) {
+    const targetId = this.getAttribute("href");
 
-links.forEach(link => {
-  link.addEventListener('click', function (e) {
-    e.preventDefault();
+    if (targetId === "#") {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      return;
+    }
 
-    const target = document.querySelector(this.getAttribute('href'));
+    const target = document.querySelector(targetId);
 
     if (target) {
+      e.preventDefault();
+
       target.scrollIntoView({
-        behavior: 'smooth'
+        behavior: "smooth",
+        block: "start"
       });
     }
   });
 });
 
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('.header');
+const header = document.querySelector(".header");
 
-  if (window.scrollY > 50) {
-    header.style.background = 'rgba(5, 9, 20, 0.95)';
+function updateHeader() {
+  if (!header) return;
+
+  if (window.scrollY > 80) {
+    header.classList.add("header-scroll");
   } else {
-    header.style.background = 'rgba(5, 9, 20, 0.8)';
+    header.classList.remove("header-scroll");
   }
+}
+
+window.addEventListener("scroll", updateHeader);
+window.addEventListener("load", updateHeader);
+
+const sections = document.querySelectorAll("section[id]");
+const navLinks = document.querySelectorAll(".nav a");
+
+function updateActiveMenu() {
+  let current = "";
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 160;
+
+    if (window.scrollY >= sectionTop) {
+      current = section.getAttribute("id");
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove("active");
+
+    if (link.getAttribute("href") === "#" + current) {
+      link.classList.add("active");
+    }
+  });
+}
+
+window.addEventListener("scroll", updateActiveMenu);
+window.addEventListener("load", updateActiveMenu);
+
+const revealElements = document.querySelectorAll(
+  ".card, .service-card, .case-card, .step, .section-title, .about-number, .about-text"
+);
+
+function revealOnScroll() {
+  revealElements.forEach(element => {
+    const elementTop = element.getBoundingClientRect().top;
+
+    if (elementTop < window.innerHeight - 90) {
+      element.classList.add("show");
+    }
+  });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+window.addEventListener("load", revealOnScroll);
+
+const topButton = document.createElement("button");
+topButton.innerHTML = "↑";
+topButton.className = "back-top";
+topButton.setAttribute("aria-label", "Voltar ao topo");
+
+document.body.appendChild(topButton);
+
+topButton.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 });
+
+function toggleTopButton() {
+  if (window.scrollY > 500) {
+    topButton.classList.add("visible");
+  } else {
+    topButton.classList.remove("visible");
+  }
+}
+
+window.addEventListener("scroll", toggleTopButton);
+window.addEventListener("load", toggleTopButton);
