@@ -46,7 +46,7 @@ function updateActiveMenu() {
   let current = "";
 
   sections.forEach(section => {
-    const sectionTop = section.offsetTop - 160;
+    const sectionTop = section.offsetTop - 150;
 
     if (window.scrollY >= sectionTop) {
       current = section.getAttribute("id");
@@ -66,7 +66,7 @@ window.addEventListener("scroll", updateActiveMenu);
 window.addEventListener("load", updateActiveMenu);
 
 const revealElements = document.querySelectorAll(
-  ".card, .service-card, .case-card, .step, .section-title, .about-number, .about-text"
+  ".service-card, .case-card, .step, .section-title, .stats-box, .about-box"
 );
 
 function revealOnScroll() {
